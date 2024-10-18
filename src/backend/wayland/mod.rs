@@ -41,7 +41,7 @@ mod workspace;
 use super::{CaptureFilter, CaptureImage, Cmd, Event};
 
 pub fn subscription(conn: Connection) -> iced::Subscription<Event> {
-    iced::subscription::run_with_id("wayland-sub", async { start(conn) }.flatten_stream())
+    iced::Subscription::run_with_id("wayland-sub", async { start(conn) }.flatten_stream())
 }
 
 pub struct AppData {
@@ -134,6 +134,7 @@ impl AppData {
             .borrow_mut()
             .entry(source.clone())
             .or_insert_with(|| {
+                dbg!(&source);
                 let matches = self.matches_capture_filter(&source);
                 let capture = Capture::new(source);
                 if matches {
