@@ -47,11 +47,16 @@ mock-backend = []
 opt-level = 1
 
 [patch."https://github.com/pop-os/libcosmic"]
-libcosmic = { path = "../../libcosmic" }
-cosmic-config = { path = "../../libcosmic/cosmic-config" }
-
-[patch.crates-io]
-wgpu = { path = "../../../wgpu/wgpu" }
-
-[patch."https://github.com/pop-os/smithay-clipboard"]
-smithay-clipboard = { path = "../../../smithay-clipboard" }
+# libcosmic = { path = "../../libcosmic" }
+# cosmic-config = { path = "../../libcosmic/cosmic-config" }
+iced_winit = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_graphics = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_renderer = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_core = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_widget = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_futures = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_wgpu = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_tiny_skia = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_accessibility = { git = "https://github.com/pop-os/iced", branch = "subsurface" }
+iced_runtime = { git = "https://github.com/pop-os/iced", branch = "subsurface" }

@@ -1118,20 +1118,9 @@ dependencies = [
 [[package]]
 name = "cosmic-client-toolkit"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/cosmic-protocols?rev=c8d3a1c#c8d3a1c3d40d16235f4720969a54ed570ec7a976"
-dependencies = [
- "cosmic-protocols 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=c8d3a1c)",
- "libc",
- "smithay-client-toolkit",
- "wayland-client",
-]
-
-[[package]]
-name = "cosmic-client-toolkit"
-version = "0.1.0"
 source = "git+https://github.com/pop-os/cosmic-protocols?rev=d218c76#d218c76b58c7a3b20dd5e7943f93fc306a1b81b8"
 dependencies = [
- "cosmic-protocols 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=d218c76)",
+ "cosmic-protocols",
  "libc",
  "smithay-client-toolkit",
  "wayland-client",
@@ -1151,6 +1140,7 @@ dependencies = [
 [[package]]
 name = "cosmic-config"
 version = "0.1.0"
+source = "git+https://github.com/pop-os/libcosmic#aeb87f88865a92fee6b96e061f618d20abe59aaa"
 dependencies = [
  "atomicwrites",
  "cosmic-config-derive",
@@ -1169,23 +1159,23 @@ dependencies = [
 [[package]]
 name = "cosmic-config-derive"
 version = "0.1.0"
+source = "git+https://github.com/pop-os/libcosmic#aeb87f88865a92fee6b96e061f618d20abe59aaa"
 dependencies = [
  "quote",
  "syn 1.0.109",
 ]
 
 [[package]]
-name = "cosmic-protocols"
-version = "0.1.0"
-source = "git+https://github.com/pop-os/cosmic-protocols?rev=c8d3a1c#c8d3a1c3d40d16235f4720969a54ed570ec7a976"
+name = "cosmic-freedesktop-icons"
+version = "0.2.6"
+source = "git+https://github.com/pop-os/freedesktop-icons#5a3b4163148a9600a54cc846aa863f4e6389635d"
 dependencies = [
- "bitflags 2.6.0",
- "wayland-backend",
- "wayland-client",
- "wayland-protocols",
- "wayland-protocols-wlr",
- "wayland-scanner",
- "wayland-server",
+ "dirs 5.0.1",
+ "once_cell",
+ "rust-ini",
+ "thiserror",
+ "tracing",
+ "xdg",
 ]
 
 [[package]]
@@ -1228,6 +1218,7 @@ dependencies = [
 [[package]]
 name = "cosmic-theme"
 version = "0.1.0"
+source = "git+https://github.com/pop-os/libcosmic#aeb87f88865a92fee6b96e061f618d20abe59aaa"
 dependencies = [
  "almost",
  "cosmic-config",
@@ -1371,6 +1362,8 @@ checksum = "96a6ac251f4a2aca6b3f91340350eab87ae57c3f127ffeb585e92bd336717991"
 [[package]]
 name = "d3d12"
 version = "22.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bdbd1f579714e3c809ebd822c81ef148b1ceaeb3d535352afc73fd0c4c6a0017"
 dependencies = [
  "bitflags 2.6.0",
  "libloading",
@@ -2011,16 +2004,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fraction"
-version = "0.15.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f158e3ff0a1b334408dc9fb811cd99b446986f4d8b741bb08f9df1604085ae7"
-dependencies = [
- "lazy_static",
- "num",
-]
-
-[[package]]
 name = "freedesktop-desktop-entry"
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2549,6 +2532,7 @@ dependencies = [
 [[package]]
 name = "iced"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "dnd",
  "iced_accessibility",
@@ -2566,6 +2550,7 @@ dependencies = [
 [[package]]
 name = "iced_accessibility"
 version = "0.1.0"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "accesskit",
  "accesskit_winit",
@@ -2574,10 +2559,11 @@ dependencies = [
 [[package]]
 name = "iced_core"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "bitflags 2.6.0",
  "bytes",
- "cosmic-client-toolkit 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=d218c76)",
+ "cosmic-client-toolkit",
  "dnd",
  "glam",
  "log",
@@ -2597,6 +2583,7 @@ dependencies = [
 [[package]]
 name = "iced_futures"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "futures",
  "iced_core",
@@ -2622,6 +2609,7 @@ dependencies = [
 [[package]]
 name = "iced_graphics"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "bitflags 2.6.0",
  "bytemuck",
@@ -2643,6 +2631,7 @@ dependencies = [
 [[package]]
 name = "iced_renderer"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "iced_graphics",
  "iced_tiny_skia",
@@ -2654,9 +2643,10 @@ dependencies = [
 [[package]]
 name = "iced_runtime"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "bytes",
- "cosmic-client-toolkit 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=d218c76)",
+ "cosmic-client-toolkit",
  "dnd",
  "iced_core",
  "iced_futures",
@@ -2668,6 +2658,7 @@ dependencies = [
 [[package]]
 name = "iced_tiny_skia"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "bytemuck",
  "cosmic-text",
@@ -2683,11 +2674,12 @@ dependencies = [
 [[package]]
 name = "iced_wgpu"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
  "as-raw-xcb-connection",
  "bitflags 2.6.0",
  "bytemuck",
- "cosmic-client-toolkit 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=d218c76)",
+ "cosmic-client-toolkit",
  "futures",
  "glam",
  "guillotiere",
@@ -2713,8 +2705,9 @@ dependencies = [
 [[package]]
 name = "iced_widget"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
- "cosmic-client-toolkit 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=d218c76)",
+ "cosmic-client-toolkit",
  "dnd",
  "iced_renderer",
  "iced_runtime",
@@ -2730,8 +2723,9 @@ dependencies = [
 [[package]]
 name = "iced_winit"
 version = "0.14.0-dev"
+source = "git+https://github.com/pop-os/iced?branch=subsurface#e60738401d059002ff366b489e630ef9046698c0"
 dependencies = [
- "cosmic-client-toolkit 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=d218c76)",
+ "cosmic-client-toolkit",
  "dnd",
  "iced_futures",
  "iced_graphics",
@@ -3075,17 +3069,17 @@ checksum = "8e9489c2807c139ffd9c1794f4af0ebe86a828db53ecdc7fea2111d0fed085d1"
 [[package]]
 name = "libcosmic"
 version = "0.1.0"
+source = "git+https://github.com/pop-os/libcosmic#aeb87f88865a92fee6b96e061f618d20abe59aaa"
 dependencies = [
  "apply",
  "ashpd 0.9.2",
  "chrono",
- "cosmic-client-toolkit 0.1.0 (git+https://github.com/pop-os/cosmic-protocols?rev=c8d3a1c)",
+ "cosmic-client-toolkit",
  "cosmic-config",
+ "cosmic-freedesktop-icons",
  "cosmic-theme",
  "css-color",
  "derive_setters",
- "fraction",
- "freedesktop-icons",
  "iced",
  "iced_core",
  "iced_futures",
@@ -3376,6 +3370,8 @@ checksum = "16cf681a23b4d0a43fc35024c176437f9dcd818db34e0f42ab456a0ee5ad497b"
 [[package]]
 name = "naga"
 version = "22.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8bd5a652b6faf21496f2cfd88fc49989c8db0825d1f6746b1a71a6ede24a63ad"
 dependencies = [
  "arrayvec",
  "bit-set",
@@ -3473,70 +3469,6 @@ dependencies = [
  "mio 0.8.11",
  "walkdir",
  "windows-sys 0.48.0",
-]
-
-[[package]]
-name = "num"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "35bd024e8b2ff75562e5f34e7f4905839deb4b22955ef5e73d2fea1b9813cb23"
-dependencies = [
- "num-bigint",
- "num-complex",
- "num-integer",
- "num-iter",
- "num-rational",
- "num-traits",
-]
-
-[[package]]
-name = "num-bigint"
-version = "0.4.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5e44f723f1133c9deac646763579fdb3ac745e418f2a7af9cd0c431da1f20b9"
-dependencies = [
- "num-integer",
- "num-traits",
-]
-
-[[package]]
-name = "num-complex"
-version = "0.4.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "73f88a1307638156682bada9d7604135552957b7818057dcef22705b4d509495"
-dependencies = [
- "num-traits",
-]
-
-[[package]]
-name = "num-integer"
-version = "0.1.46"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7969661fd2958a5cb096e56c8e1ad0444ac2bbcd0061bd28660485a44879858f"
-dependencies = [
- "num-traits",
-]
-
-[[package]]
-name = "num-iter"
-version = "0.1.45"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1429034a0490724d0075ebb2bc9e875d6503c3cf69e235a8941aa757d83ef5bf"
-dependencies = [
- "autocfg",
- "num-integer",
- "num-traits",
-]
-
-[[package]]
-name = "num-rational"
-version = "0.4.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f83d14da390562dca69fc84082e73e548e1ad308d24accdedd2720017cb37824"
-dependencies = [
- "num-bigint",
- "num-integer",
- "num-traits",
 ]
 
 [[package]]
@@ -4798,6 +4730,7 @@ dependencies = [
 [[package]]
 name = "smithay-clipboard"
 version = "0.8.0"
+source = "git+https://github.com/pop-os/smithay-clipboard?tag=pop-dnd-5#5a3007def49eb678d1144850c9ee04b80707c56a"
 dependencies = [
  "libc",
  "raw-window-handle",
@@ -5688,6 +5621,8 @@ checksum = "53a85b86a771b1c87058196170769dd264f66c0782acf1ae6cc51bfd64b39082"
 [[package]]
 name = "wgpu"
 version = "22.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e1d1c4ba43f80542cf63a0a6ed3134629ae73e8ab51e4b765a67f3aa062eb433"
 dependencies = [
  "arrayvec",
  "cfg_aliases 0.1.1",
@@ -5711,6 +5646,8 @@ dependencies = [
 [[package]]
 name = "wgpu-core"
 version = "22.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0348c840d1051b8e86c3bcd31206080c5e71e5933dabd79be1ce732b0b2f089a"
 dependencies = [
  "arrayvec",
  "bit-vec",
@@ -5734,6 +5671,8 @@ dependencies = [
 [[package]]
 name = "wgpu-hal"
 version = "22.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f6bbf4b4de8b2a83c0401d9e5ae0080a2792055f25859a02bf9be97952bbed4f"
 dependencies = [
  "android_system_properties",
  "arrayvec",
@@ -5777,6 +5716,8 @@ dependencies = [
 [[package]]
 name = "wgpu-types"
 version = "22.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bc9d91f0e2c4b51434dfa6db77846f2793149d8e73f800fa2e41f52b8eac3c5d"
 dependencies = [
  "bitflags 2.6.0",
  "js-sys",
