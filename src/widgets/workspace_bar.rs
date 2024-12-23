@@ -8,6 +8,7 @@ use cosmic::iced::{
         widget::{Operation, Tree},
         Clipboard, Layout, Shell, Widget,
     },
+    core::clipboard::DndDestinationRectangles,
     event::{self, Event},
     Length, Point, Rectangle, Size,
 };
@@ -218,6 +219,25 @@ impl<'a, Msg> Widget<Msg, cosmic::Theme, cosmic::Renderer> for WorkspaceBar<'a, 
 
     fn diff(&mut self, tree: &mut Tree) {
         tree.diff_children(&mut self.children);
+    }
+
+    // TODO drag_destinations
+    fn drag_destinations(
+        &self,
+        state: &Tree,
+        layout: Layout<'_>,
+        renderer: &cosmic::Renderer,
+        dnd_rectangles: &mut DndDestinationRectangles,
+    ) {
+        for ((e, layout), state) in self
+            .children
+            .iter()
+            .zip(layout.children())
+            .zip(state.children.iter())
+        {
+            e.as_widget()
+                .drag_destinations(state, layout, renderer, dnd_rectangles);
+        }
     }
 }
 

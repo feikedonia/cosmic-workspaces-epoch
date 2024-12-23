@@ -1,3 +1,5 @@
+// TODO dnd_destination_for_data? AllowedMimeTypes?
+
 use cctk::{
     cosmic_protocols::toplevel_info::v1::client::zcosmic_toplevel_handle_v1,
     wayland_client::protocol::wl_output,
@@ -20,21 +22,8 @@ use std::borrow::Cow;
 
 use crate::{
     backend::{self, CaptureImage},
-    App, DragSurface, LayerSurface, Msg, Toplevel, Workspace,
+    App, DragSurface, DragToplevel, LayerSurface, Msg, Toplevel, Workspace,
 };
-
-struct Mime {}
-
-impl cosmic::iced::clipboard::mime::AsMimeTypes for Mime {
-    fn available(&self) -> Cow<'static, [String]> {
-        // TODO
-        vec![crate::TOPLEVEL_MIME.clone()].into()
-    }
-
-    fn as_bytes(&self, mime_type: &str) -> Option<Cow<'static, [u8]>> {
-        None
-    }
-}
 
 pub(crate) fn layer_surface<'a>(
     app: &'a App,
@@ -216,12 +205,16 @@ fn workspace_sidebar_entry<'a>(
     let workspace_handle2 = workspace_handle.clone();
     let output_clone = output.clone();
     let output_clone2 = output.clone();
-    cosmic::widget::dnd_destination(
+    cosmic::widget::dnd_destination::dnd_destination_for_data(
         workspace_item(workspace, output, is_drop_target),
-        vec![crate::TOPLEVEL_MIME.as_str().into()],
+        |data: Option<DragToplevel>, _action| match data {
+            Some(toplevel) => Msg::DndWorkspaceDrop(toplevel),
+            None => Msg::Ignore,
+        },
     )
-    // XXX
+    .drag_id(1)
     .on_enter(move |actions, mime, pos| {
+        println!("on_enter: {:?}", workspace_handle);
         Msg::DndWorkspaceEnter(
             workspace_handle.clone(),
             output_clone.clone(),
@@ -231,8 +224,6 @@ fn workspace_sidebar_entry<'a>(
         )
     })
     .on_leave(move || Msg::DndWorkspaceLeave(workspace_handle2.clone(), output_clone2.clone()))
-    .on_drop(Msg::DndWorkspaceDrop)
-    .on_data_received(Msg::DndWorkspaceData)
     //)
     .into()
 }
@@ -385,12 +376,11 @@ fn toplevel_previews_entry<'a>(
         toplevel_preview(toplevel, is_being_dragged),
         !is_being_dragged,
     );
-    //let drag_icon = toplevel_preview(toplevel, true).map(|_| ());
     let toplevel2 = toplevel.clone(); // XXX
-    cosmic::widget::dnd_source::<_, Mime>(preview)
+    cosmic::widget::dnd_source::<_, DragToplevel>(preview)
         .drag_threshold(5.)
-        .drag_content(|| Mime {})
-        // XXX State
+        .drag_content(|| DragToplevel {})
+        // XXX State?
         .drag_icon(move || {
             (
                 toplevel_preview_static(&toplevel2, true).map(|_| ()),

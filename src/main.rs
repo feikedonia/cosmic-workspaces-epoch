@@ -17,14 +17,9 @@ use cosmic::{
     cctk,
     iced::{
         self,
+        clipboard::mime::{AllowedMimeTypes, AsMimeTypes},
         event::wayland::{Event as WaylandEvent, OutputEvent},
         keyboard::key::{Key, Named},
-        /*
-        wayland::{
-            actions::data_device::{DataFromMimeType, DndIcon},
-            data_device::{accept_mime_type, request_dnd_data, set_actions, start_drag},
-        },
-        */
         widget, Size, Subscription, Task, Vector,
     },
     iced_core::window::Id as SurfaceId,
@@ -40,6 +35,7 @@ use cosmic_config::{cosmic_config_derive::CosmicConfigEntry, CosmicConfigEntry};
 use i18n_embed::DesktopLanguageRequester;
 use once_cell::sync::Lazy;
 use std::{
+    borrow::Cow,
     collections::{HashMap, HashSet},
     mem,
     path::PathBuf,
@@ -92,21 +88,40 @@ impl CosmicFlags for Args {
     }
 }
 
-struct WlDndId {
-    mime_type: &'static str,
-}
+// TODO store protocol object id?
+#[derive(Clone, Debug)]
+struct DragToplevel {}
 
-/*
-impl DataFromMimeType for WlDndId {
-    fn from_mime_type(&self, mime_type: &str) -> Option<Vec<u8>> {
-        if mime_type == self.mime_type {
-            Some(Vec::new())
+impl AsMimeTypes for DragToplevel {
+    fn available(&self) -> Cow<'static, [String]> {
+        vec![TOPLEVEL_MIME.clone()].into()
+    }
+
+    fn as_bytes(&self, mime_type: &str) -> Option<Cow<'static, [u8]>> {
+        if mime_type == *TOPLEVEL_MIME {
+            Some(Vec::new().into())
         } else {
             None
         }
     }
 }
-*/
+
+impl cosmic::iced::clipboard::mime::AllowedMimeTypes for DragToplevel {
+    fn allowed() -> Cow<'static, [String]> {
+        vec![crate::TOPLEVEL_MIME.clone()].into()
+    }
+}
+
+impl TryFrom<(Vec<u8>, std::string::String)> for DragToplevel {
+    type Error = ();
+    fn try_from((bytes, mime_type): (Vec<u8>, String)) -> Result<Self, ()> {
+        if mime_type == *TOPLEVEL_MIME {
+            Ok(Self {})
+        } else {
+            Err(())
+        }
+    }
+}
 
 #[derive(Clone, Debug)]
 enum Msg {
@@ -125,21 +140,17 @@ enum Msg {
         wl_output::WlOutput,
         f64,
         f64,
-        Vec<String>, /*
-                     DndAction,
-                     Vec<String>,
-                     (f32, f32),
-                     */
+        Vec<String>,
     ),
     DndWorkspaceLeave(ZcosmicWorkspaceHandleV1, wl_output::WlOutput),
-    DndWorkspaceDrop(f64, f64),
-    DndWorkspaceData(String, Vec<u8>),
+    DndWorkspaceDrop(DragToplevel),
     SourceFinished,
     #[allow(dead_code)]
     NewWorkspace,
     CompConfig(Box<CosmicCompConfig>),
     Config(CosmicWorkspacesConfig),
     BgConfig(cosmic_bg_config::state::State),
+    Ignore,
 }
 
 #[derive(Debug)]
@@ -521,20 +532,8 @@ impl Application for App {
                     */
                 }
             }
-            //Msg::DndWorkspaceEnter(handle, output, _action, mimes, (_x, _y)) => {
-            Msg::DndWorkspaceEnter(handle, output, x, y, mimes) => {
-                // ?
+            Msg::DndWorkspaceEnter(handle, output, _x, _y, _mimes) => {
                 self.drop_target = Some((handle, output));
-                // XXX
-                // if mimes.iter().any(|x| x == WORKSPACE_MIME) && action == DndAction::Move {
-                /*
-                if mimes.iter().any(|x| x == &*TOPLEVEL_MIME) {
-                    return Task::batch(vec![
-                        set_actions(DndAction::Move, DndAction::Move),
-                        accept_mime_type(Some(TOPLEVEL_MIME.to_string())),
-                    ]);
-                }
-                */
             }
             Msg::DndWorkspaceLeave(handle, output) => {
                 // Currently in iced-sctk, a `DndOfferEvent::Motion` may cause a leave event after
@@ -542,25 +541,15 @@ impl Application for App {
                 if self.drop_target == Some((handle, output)) {
                     self.drop_target = None;
                 }
-                // return accept_mime_type(None);
             }
-            Msg::DndWorkspaceDrop(_, _) => { // XXX
-                 //    return request_dnd_data(TOPLEVEL_MIME.to_string());
-            }
-            Msg::DndWorkspaceData(mime_type, data) => {
-                if mime_type == *TOPLEVEL_MIME {
-                    // XXX getting empty data?
-                    let _protocol_id = str::from_utf8(&data)
-                        .ok()
-                        .and_then(|s| u32::from_str(s).ok());
-                    if let Some((_, DragSurface::Toplevel { handle, .. }, _)) = &self.drag_surface {
-                        if let Some(drop_target) = self.drop_target.take() {
-                            self.send_wayland_cmd(backend::Cmd::MoveToplevelToWorkspace(
-                                handle.clone(),
-                                drop_target.0,
-                                drop_target.1,
-                            ));
-                        }
+            Msg::DndWorkspaceDrop(_toplevel) => {
+                if let Some((_, DragSurface::Toplevel { handle, .. }, _)) = &self.drag_surface {
+                    if let Some(drop_target) = self.drop_target.take() {
+                        self.send_wayland_cmd(backend::Cmd::MoveToplevelToWorkspace(
+                            handle.clone(),
+                            drop_target.0,
+                            drop_target.1,
+                        ));
                     }
                 }
             }
@@ -584,6 +573,7 @@ impl Application for App {
             Msg::BgConfig(c) => {
                 self.conf.bg = c;
             }
+            Msg::Ignore => {}
         }
 
         Task::none()
