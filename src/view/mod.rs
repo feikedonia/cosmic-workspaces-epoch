@@ -176,6 +176,7 @@ fn workspace_sidebar_entry<'a>(
     workspace: &'a Workspace,
     output: &'a wl_output::WlOutput,
     is_drop_target: bool,
+    drag_id: u64,
 ) -> cosmic::Element<'a, Msg> {
     /* XXX
     let mouse_interaction = if is_drop_target {
@@ -212,7 +213,7 @@ fn workspace_sidebar_entry<'a>(
             None => Msg::Ignore,
         },
     )
-    .drag_id(1)
+    .drag_id(drag_id)
     .on_enter(move |actions, mime, pos| {
         println!("on_enter: {:?}", workspace_handle);
         Msg::DndWorkspaceEnter(
@@ -235,7 +236,8 @@ fn workspaces_sidebar<'a>(
     drop_target: Option<&backend::ZcosmicWorkspaceHandleV1>,
 ) -> cosmic::Element<'a, Msg> {
     let sidebar_entries = workspaces
-        .map(|w| workspace_sidebar_entry(w, output, drop_target == Some(&w.handle)))
+        .enumerate()
+        .map(|(i, w)| workspace_sidebar_entry(w, output, drop_target == Some(&w.handle), i as u64))
         .collect();
     let axis = match layout {
         WorkspaceLayout::Vertical => Axis::Vertical,
